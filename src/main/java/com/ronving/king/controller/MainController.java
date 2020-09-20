@@ -12,8 +12,11 @@ import java.util.Map;
 
 @Controller
 public class MainController {
-    @Autowired
-    private MessageRepo messageRepo;
+    private final MessageRepo messageRepo;
+
+    public MainController(MessageRepo messageRepo) {
+        this.messageRepo = messageRepo;
+    }
 
     @GetMapping("/")
     public String greeting(Map<String, Object> model) {
