@@ -53,4 +53,12 @@ public class UserController {
         userRepo.save(user);
         return "redirect:/user";
     }
+
+    @GetMapping("/delete/{user}")
+    public String deleteUser(@PathVariable User user) {
+        userRepo.delete(user);
+        return "redirect:/user";
+    }
+
+
 }
