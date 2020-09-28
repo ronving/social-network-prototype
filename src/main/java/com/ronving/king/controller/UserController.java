@@ -37,19 +37,22 @@ public class UserController {
     }
 
     @PostMapping
-    public String saveUser(@RequestParam String username, @RequestParam("userId") User user,
-                           @RequestParam Map<String, String> form
-    ) {
+    public String saveUser(@RequestParam String username,
+                           @RequestParam("userId") User user,
+                           @RequestParam Map<String, String> form) {
         user.setUsername(username);
+
         Set<String> roles = Arrays.stream(Role.values())
                 .map(Role::name)
                 .collect(Collectors.toSet());
         user.getRoles().clear();
+
         for (String key : form.keySet()) {
             if (roles.contains(key)) {
                 user.getRoles().add(Role.valueOf(key));
             }
         }
+
         userRepo.save(user);
         return "redirect:/user";
     }
@@ -59,6 +62,4 @@ public class UserController {
         userRepo.delete(user);
         return "redirect:/user";
     }
-
-
 }
