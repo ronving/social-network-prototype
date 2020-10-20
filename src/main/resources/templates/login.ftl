@@ -2,6 +2,7 @@
 <#import "parts/auth.ftl" as a>
 
 <@c.page>
-Login page
-<@a.auth "/login" false/>
+    Login page
+    ${message?ifExists}
+    <@a.auth "/login" false/>
 </@c.page>
