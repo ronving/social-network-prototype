@@ -2,7 +2,9 @@ package com.ronving.king.controller;
 
 import com.ronving.king.domain.User;
 import com.ronving.king.repos.UserRepo;
+import com.ronving.king.service.MailSenderService;
 import com.ronving.king.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,14 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
 public class RegistrationController {
-    private final UserRepo userRepo;
-    private final UserService userService;
 
-    public RegistrationController(UserRepo userRepo, UserService userService) {
-        this.userRepo = userRepo;
-        this.userService = userService;
-    }
+    private final UserService userService;
+    private final MailSenderService mailSenderService;
 
     @GetMapping("/registration")
     public String registration() {
@@ -32,7 +31,7 @@ public class RegistrationController {
             model.put("message", "User exists!");
             return "registration";
         }
-
+        mailSenderService.createActivationCode(user);
         return "redirect:/login";
     }
 

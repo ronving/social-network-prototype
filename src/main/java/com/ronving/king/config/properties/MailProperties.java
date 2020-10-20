@@ -44,4 +44,8 @@ public class MailProperties {
     @NotNull
     @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
     private String enable;
+
+    @NotNull
+    @Value("${mail.domain}")
+    private String domain;
 }
