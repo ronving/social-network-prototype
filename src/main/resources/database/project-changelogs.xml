@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="001" author="ronving" context="init DB">
+        <sqlFile path="database/changelogs/changelog.001.sql"/>
+    </changeSet>
+    <changeSet id="002" author="ronving" context="add Admin">
+        <sqlFile path="database/changelogs/changelog.002.sql"/>
+    </changeSet>
+
+</databaseChangeLog>

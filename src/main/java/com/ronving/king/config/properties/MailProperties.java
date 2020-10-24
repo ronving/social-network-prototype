@@ -9,43 +9,43 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotNull;
 
 @Configuration
-@ConfigurationProperties(prefix = "spring.mail")
+@ConfigurationProperties(prefix = "mail.settings")
 @Getter
 @Validated
 public class MailProperties {
     @NotNull
-    @Value("${spring.mail.host}")
+    @Value("${mail.settings.host}")
     private String host;
 
     @NotNull
-    @Value("${spring.mail.username}")
+    @Value("${mail.settings.username}")
     private String username;
 
     @NotNull
-    @Value("${spring.mail.password}")
+    @Value("${mail.settings.password}")
     private String password;
 
     @NotNull
-    @Value("${spring.mail.port}")
+    @Value("${mail.settings.port}")
     private int port;
 
     @NotNull
-    @Value("${spring.mail.protocol}")
+    @Value("${mail.settings.protocol}")
     private String protocol;
 
     @NotNull
-    @Value("${mail.debug}")
+    @Value("${mail.settings.debug}")
     private String debug;
 
     @NotNull
-    @Value("${spring.mail.properties.mail.smtp.auth}")
+    @Value("${mail.settings.auth}")
     private String auth;
 
     @NotNull
-    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
+    @Value("${mail.settings.enable}")
     private String enable;
 
     @NotNull
-    @Value("${mail.domain}")
+    @Value("${mail.settings.domain}")
     private String domain;
 }
