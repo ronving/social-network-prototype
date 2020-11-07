@@ -5,6 +5,7 @@ import com.ronving.king.domain.User;
 import com.ronving.king.repos.MessageRepo;
 import com.ronving.king.repos.UserRepo;
 import com.ronving.king.service.AuthService;
+import com.ronving.king.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -22,27 +23,18 @@ import java.util.UUID;
 @Controller
 @RequiredArgsConstructor
 public class MainController {
+
     private final AuthService authService;
-    private final MessageRepo messageRepo;
-    private final UserRepo userRepo;
-    @Value("${upload.path}")
-    private String uploadPath;
+    private final MessageService messageService;
 
     @GetMapping("/")
-    public String greeting(Map<String, Object> model) {
+    public String greeting() {
         return "greeting";
     }
 
     @GetMapping("/main")
     public String main(@RequestParam(required = false) String filter, Model model) {
-        Iterable<Message> messages;
-
-        if (filter != null && !filter.isEmpty()) {
-            messages = messageRepo.findByTag(filter);
-        } else {
-            messages = messageRepo.findAll();
-        }
-
+        Iterable<Message> messages = messageService.findMessagesByFilter(filter);
         model.addAttribute("messages", messages);
         model.addAttribute("filter", filter);
 
@@ -55,25 +47,7 @@ public class MainController {
                       @RequestParam("file") MultipartFile file) throws IOException {
         User user = authService.getAuthenticationPrincipal();
         Message message = new Message(text, tag, user);
-
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadPath);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-            message.setFilename(resultFilename);
-        }
-        messageRepo.save(message);
-
-        Iterable<Message> messages = messageRepo.findAll();
-
+        Iterable<Message> messages = messageService.createNewMessage(file, message);
         model.put("messages", messages);
 
         return "main";
