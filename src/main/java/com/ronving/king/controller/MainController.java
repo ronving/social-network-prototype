@@ -4,9 +4,9 @@ import com.ronving.king.domain.Message;
 import com.ronving.king.domain.User;
 import com.ronving.king.repos.MessageRepo;
 import com.ronving.king.repos.UserRepo;
+import com.ronving.king.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,16 +20,13 @@ import java.util.Map;
 import java.util.UUID;
 
 @Controller
+@RequiredArgsConstructor
 public class MainController {
+    private final AuthService authService;
     private final MessageRepo messageRepo;
     private final UserRepo userRepo;
     @Value("${upload.path}")
     private String uploadPath;
-
-    public MainController(MessageRepo messageRepo, UserRepo userRepo) {
-        this.messageRepo = messageRepo;
-        this.userRepo = userRepo;
-    }
 
     @GetMapping("/")
     public String greeting(Map<String, Object> model) {
@@ -56,9 +53,7 @@ public class MainController {
     public String add(@RequestParam String text,
                       @RequestParam String tag, Map<String, Object> model,
                       @RequestParam("file") MultipartFile file) throws IOException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName();
-        User user = userRepo.findByUsername(name);
+        User user = authService.getAuthenticationPrincipal();
         Message message = new Message(text, tag, user);
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {

@@ -30,7 +30,7 @@ class MailSenderImpl implements MailSenderService {
     }
 
     @Override
-    public void createActivationCode(User user) {
+    public void createActivationMessage(User user) {
         if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
                     "Hello, %s! \n" +

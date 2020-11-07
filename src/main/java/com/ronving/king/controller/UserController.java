@@ -2,33 +2,33 @@ package com.ronving.king.controller;
 
 import com.ronving.king.domain.Role;
 import com.ronving.king.domain.User;
-import com.ronving.king.repos.UserRepo;
+import com.ronving.king.service.AuthService;
+import com.ronving.king.service.MailSenderService;
+import com.ronving.king.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
-@PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
-    private final UserRepo userRepo;
+    private final AuthService authService;
+    private final UserService userService;
+    private final MailSenderService mailSenderService;
 
-    public UserController(UserRepo userRepo) {
-        this.userRepo = userRepo;
-    }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public String getUserList(Model model) {
-        model.addAttribute("users", userRepo.findAll());
+        model.addAttribute("users", userService.findAll());
         return "userList";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("{user}")
     public String editUser(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
@@ -36,30 +36,38 @@ public class UserController {
         return "userEdit";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public String saveUser(@RequestParam String username,
                            @RequestParam("userId") User user,
                            @RequestParam Map<String, String> form) {
-        user.setUsername(username);
-
-        Set<String> roles = Arrays.stream(Role.values())
-                .map(Role::name)
-                .collect(Collectors.toSet());
-        user.getRoles().clear();
-
-        for (String key : form.keySet()) {
-            if (roles.contains(key)) {
-                user.getRoles().add(Role.valueOf(key));
-            }
-        }
-
-        userRepo.save(user);
+        userService.saveUser(user, username, form);
         return "redirect:/user";
     }
 
-    @GetMapping("/delete/{user}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("delete/{user}")
     public String deleteUser(@PathVariable User user) {
-        userRepo.delete(user);
+        userService.deleteUser(user);
         return "redirect:/user";
+    }
+
+    @GetMapping("profile")
+    public String getProfile(Model model) {
+        User user = authService.getAuthenticationPrincipal();
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("email", user.getEmail());
+        return "profile";
+    }
+
+    @PostMapping("profile")
+    public String updateProfile(@RequestParam String password, @RequestParam String email) {
+        User user = authService.getAuthenticationPrincipal();
+        User updatedUser = userService.updateProfile(user, password, email);
+
+        if (!updatedUser.getActivationCode().equals(user.getActivationCode())) {
+            mailSenderService.createActivationMessage(updatedUser);
+        }
+        return "redirect:/user/profile";
     }
 }

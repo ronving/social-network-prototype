@@ -1,7 +1,6 @@
 package com.ronving.king.controller;
 
 import com.ronving.king.domain.User;
-import com.ronving.king.repos.UserRepo;
 import com.ronving.king.service.MailSenderService;
 import com.ronving.king.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ public class RegistrationController {
             model.put("message", "User exists!");
             return "registration";
         }
-        mailSenderService.createActivationCode(user);
+        mailSenderService.createActivationMessage(user);
         return "redirect:/login";
     }
 
