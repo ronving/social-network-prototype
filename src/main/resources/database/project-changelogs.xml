@@ -11,5 +11,8 @@
     <changeSet id="002" author="ronving" context="add Admin">
         <sqlFile path="database/changelogs/changelog.002.sql"/>
     </changeSet>
+    <changeSet id="003" author="ronving" context="password Encryption">
+        <sqlFile path="database/changelogs/changelog.003.sql"/>
+    </changeSet>
 
 </databaseChangeLog>

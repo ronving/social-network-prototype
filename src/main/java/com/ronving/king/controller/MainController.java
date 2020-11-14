@@ -2,12 +2,9 @@ package com.ronving.king.controller;
 
 import com.ronving.king.domain.Message;
 import com.ronving.king.domain.User;
-import com.ronving.king.repos.MessageRepo;
-import com.ronving.king.repos.UserRepo;
 import com.ronving.king.service.AuthService;
 import com.ronving.king.service.MessageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
