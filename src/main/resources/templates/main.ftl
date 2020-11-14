@@ -15,14 +15,21 @@
         Add new Message
     </a>
 
-    <div class="collapse" id="collapseExample">
+    <div class="collapse <#if message??>show</#if>" id="collapseExample">
         <div class="form-group mt-3">
             <form method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="text" placeholder="Введите сообщение" />
+                    <input type="text" class="form-control ${(textError??)?string('is-invalid','')}" name="text" placeholder="Введите сообщение" />
+                    <#--TODO save info if exists after identifying bindingErrors. value="<#if message??>${message.text}</#if>"-->
+                    <#if textError??>
+                        <div class="invalid-feedback">
+                            ${textError}
+                        </div>
+                    </#if>
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-control" name="tag" placeholder="Тэг">
+                    <#--TODO save info if exists after identifying bindingErrors. value="<#if message??>${message.tag}</#if>"-->
                 </div>
                 <div class="form-group mt-auto">
                     <div class="custom-file">

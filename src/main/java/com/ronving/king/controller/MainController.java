@@ -7,11 +7,13 @@ import com.ronving.king.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Map;
 
@@ -37,14 +39,26 @@ public class MainController {
     }
 
     @PostMapping("/main")
-    public String add(@RequestParam String text,
-                      @RequestParam String tag, Map<String, Object> model,
+    public String add(@Valid Message message,
+                      BindingResult bindingResult,
+                      Model model,
                       @RequestParam("file") MultipartFile file) throws IOException {
+        Iterable<Message> messages;
         User user = authService.getAuthenticationPrincipal();
-        Message message = new Message(text, tag, user);
-        Iterable<Message> messages = messageService.createNewMessage(file, message);
-        model.put("messages", messages);
+        message.setAuthor(user);
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
 
+            model.mergeAttributes(errors);
+            model.addAttribute("message", message);
+            messages = messageService.findMessagesByFilter(null);
+        }
+        else {
+            messages = messageService.createNewMessage(file, message);
+            model.addAttribute("message", null);
+        }
+
+        model.addAttribute("messages", messages);
         return "main";
     }
 }
