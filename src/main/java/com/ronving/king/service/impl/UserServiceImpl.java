@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        user.setActive(true);
+        user.setActive(false);
         user.setRoles(Collections.singleton(Role.USER));
         user.setActivationCode(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setActivationCode(null);
-
+        user.setActive(true);
         userRepo.save(user);
 
         return true;

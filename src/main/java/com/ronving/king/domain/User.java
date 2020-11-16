@@ -19,6 +19,7 @@ public class User implements UserDetails {
     private Long id;
     @NotBlank(message = "Username cannot be empty")
     private String username;
+    @NotBlank(message = "Password cannot be empty")
     private String password;
     //TODO transient password confirmation
     private boolean active;
