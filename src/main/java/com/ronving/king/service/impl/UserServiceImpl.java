@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     public boolean activateUser(String code) {
         User user = userRepo.findByActivationCode(code);
 
-        if (user == null) {
+        if (user == null || user.getActivationCode() == null) {
             return false;
         }
 
