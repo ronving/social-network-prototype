@@ -24,7 +24,8 @@ public class Message {
     @NonNull
     private String text;
 
-    //TODO tag validation
+    @NotBlank(message = "Please add the tag")
+    @Length(max = 255, message = "Message too long (more than 255)")
     @NonNull
     private String tag;
     private String filename;

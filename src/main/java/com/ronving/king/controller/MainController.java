@@ -34,7 +34,6 @@ public class MainController {
         Iterable<Message> messages = messageService.findMessagesByFilter(filter);
         model.addAttribute("messages", messages);
         model.addAttribute("filter", filter);
-
         return "main";
     }
 
@@ -54,7 +53,8 @@ public class MainController {
             messages = messageService.findMessagesByFilter(null);
         }
         else {
-            messages = messageService.createNewMessage(file, message);
+            messageService.createNewMessage(file, message);
+            messages = messageService.findMessagesByFilter("");
             model.addAttribute("message", null);
         }
 

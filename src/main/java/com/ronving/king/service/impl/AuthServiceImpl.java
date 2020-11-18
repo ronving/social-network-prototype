@@ -19,4 +19,11 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepo.findByUsername(username);
         return user;
     }
+
+    @Override
+    public boolean isCurrentUser(User user) {
+        User currentUser = getAuthenticationPrincipal();
+
+        return user.equals(currentUser);
+    }
 }

@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("{user}")
+    @GetMapping("/{user}")
     public String editUser(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
@@ -46,13 +46,13 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("delete/{user}")
+    @GetMapping("/delete/{user}")
     public String deleteUser(@PathVariable User user) {
         userService.deleteUser(user);
         return "redirect:/user";
     }
 
-    @GetMapping("profile")
+    @GetMapping("/profile")
     public String getProfile(Model model) {
         User user = authService.getAuthenticationPrincipal();
         model.addAttribute("username", user.getUsername());
@@ -60,7 +60,7 @@ public class UserController {
         return "profile";
     }
 
-    @PostMapping("profile")
+    @PostMapping("/profile")
     public String updateProfile(@RequestParam String password, @RequestParam String email) {
         User user = authService.getAuthenticationPrincipal();
         User updatedUser = userService.updateProfile(user, password, email);

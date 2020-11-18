@@ -1,6 +1,7 @@
 package com.ronving.king.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,12 +13,15 @@ import java.util.Set;
 
 @Entity
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "usr")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @EqualsAndHashCode.Include
     private Long id;
     @NotBlank(message = "Username cannot be empty")
+    @EqualsAndHashCode.Include
     private String username;
     @NotBlank(message = "Password cannot be empty")
     private String password;
@@ -26,6 +30,9 @@ public class User implements UserDetails {
     @Email(message = "Email is not correct")
     private String email;
     private String activationCode;
+
+    @OneToMany(mappedBy="author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Message> messages;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
