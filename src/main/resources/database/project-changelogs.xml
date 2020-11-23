@@ -14,5 +14,8 @@
     <changeSet id="003" author="ronving" context="password Encryption">
         <sqlFile path="database/changelogs/changelog.003.sql"/>
     </changeSet>
+    <changeSet id="004" author="ronving" context="added user_subscriptions table">
+        <sqlFile path="database/changelogs/changelog.004.sql"/>
+    </changeSet>
 
 </databaseChangeLog>

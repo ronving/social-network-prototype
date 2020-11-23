@@ -27,9 +27,17 @@ public class UserMessagesController {
         Set<Message> userMessages = messageService.findMessagesByUser(user);
         boolean isCurrentUser = authService.isCurrentUser(user);
 
+        //subs info
+        model.addAttribute("userChannel", user);
+        model.addAttribute("subscriptions", user.getSubscriptions().size());
+        model.addAttribute("subscribers", user.getSubscribers().size());
+        model.addAttribute("isSubscriber", user.getSubscribers().contains(authService.getAuthenticationPrincipal()));
+
+        //messages info
         model.addAttribute("message", message);
         model.addAttribute("messages", userMessages);
         model.addAttribute("isCurrentUser", isCurrentUser);
+
         return "userMessages";
     }
 
