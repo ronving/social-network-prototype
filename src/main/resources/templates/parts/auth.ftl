@@ -1,3 +1,5 @@
+<#include "security.ftl">
+
 <#macro auth path isRegisterForm>
     <form action="${path}" method="post">
         <div class="form-group row">

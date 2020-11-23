@@ -25,11 +25,6 @@ public class MainController {
     private final MessageService messageService;
 
     @GetMapping("/")
-    public String greeting() {
-        return "greeting";
-    }
-
-    @GetMapping("/main")
     public String main(@RequestParam(required = false) String filter, Model model) {
         Iterable<Message> messages = messageService.findMessagesByFilter(filter);
         model.addAttribute("messages", messages);
@@ -37,7 +32,7 @@ public class MainController {
         return "main";
     }
 
-    @PostMapping("/main")
+    @PostMapping("/")
     public String add(@Valid Message message,
                       BindingResult bindingResult,
                       Model model,
