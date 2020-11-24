@@ -46,10 +46,9 @@ public class MainController {
             model.mergeAttributes(errors);
             model.addAttribute("message", message);
             messages = messageService.findMessagesByFilter(null);
-        }
-        else {
+        } else {
             messageService.createNewMessage(file, message);
-            messages = messageService.findMessagesByFilter("");
+            messages = messageService.findMessagesByFilter(null);
             model.addAttribute("message", null);
         }
 

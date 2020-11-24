@@ -7,11 +7,13 @@ import com.ronving.king.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
 
 @Controller
@@ -42,15 +44,23 @@ public class UserMessagesController {
     }
 
     @PostMapping("/{user}")
-    public String updateMessage(@PathVariable User user, @Valid @RequestParam("id")  Message message,
+    public String updateMessage(@PathVariable User user, Model model,
+                                @Valid @RequestParam("id") Message message,
                                 @RequestParam("text") String text,
                                 @RequestParam("tag") String tag,
                                 @RequestParam("file") MultipartFile file
-                                ) throws IOException {
-        boolean isCurrentUser = authService.isCurrentUser(user);
-        if (isCurrentUser) {
-            messageService.updateMessage(message, text, tag, file);
+    ) throws IOException {
+        if (message == null) {
+            User author = authService.getAuthenticationPrincipal();
+            Message newMessage = new Message(text, tag, author);
+            messageService.createNewMessage(file, newMessage);
+        } else {
+            boolean isCurrentUser = authService.isCurrentUser(user);
+            if (isCurrentUser) {
+                messageService.updateMessage(message, text, tag, file);
+            }
         }
+
         return "redirect:/user-messages/" + user.getId();
     }
 }
