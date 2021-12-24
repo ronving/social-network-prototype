@@ -1,2 +1,2 @@
 # VTCSN
-Social Network for Vinnytsia Technical College
+Social Network (focused on Web Security Elemenets Development)
