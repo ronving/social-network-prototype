@@ -1,2 +1,2 @@
-# VTCSN
-Social Network for Vinnytsia Technical College
+# Social Network Prototype
+simple java + thymeleaf social network prototype
